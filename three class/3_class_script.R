@@ -9,7 +9,7 @@ require(glmnet)
 library(pROC)
 train<-read.csv('3_class_input_train.csv')
 
-test<-read.csv('3classtest.csv')
+test<-read.csv('3_class_input_test.csv')
 colnames(train)
 #event=1
 rt<-train
@@ -17,29 +17,14 @@ rt$label<-as.numeric(rt$label)
 rt$label[rt$label==2]=0
 rt$label<-factor(rt$label)
 fit.full<-glm(label~.,data=rt,family = binomial)
-#fit.full<-multinom(label~.,data=train, probabilities = TRUE, model = TRUE)
 fit.result<-summary(fit.full)
-#计算p值
-# z <- summary(fit.full)$coefficients/summary(fit.full)$standard.errors
-# p <- (1 - pnorm(abs(z), 0, 1))*2
-# p
-#计算OR值
-#lable=1
 train_logstic<-round(odds.ratio(fit.full),2)
 fwrite(train_logstic,file = "Logstic_OR_1.csv",
           quote = F,row.names = T) #多因素logstic分析结果保存
 
-
-
-
-
-
-
-rm(list = ls())
 #----2.计算ROC值------
 library(pROC)
 #---label=1---
-
 rt<-train
 rt$label<-as.numeric(rt$label)
 rt$label[rt$label==2]=0
